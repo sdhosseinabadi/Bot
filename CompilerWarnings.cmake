@@ -8,8 +8,26 @@ macro(target_enable_asan target)
             $<$<AND:$<CONFIG:Debug>,$<CXX_COMPILER_ID:AppleClang>>:-fsanitize=address -fno-omit-frame-pointer>)
 endmacro()
 
+macro(target_enable_coverage target) message("-- ASAN Enabled, Configuring...")
+    target_compile_options(${target} PUBLIC
+            $<$<AND:$<CONFIG:Debug>,$<CXX_COMPILER_ID:Clang>>:-fsanitize=address -fno-omit-frame-pointer>
+            $<$<AND:$<CONFIG:Debug>,$<CXX_COMPILER_ID:AppleClang>>:-fsanitize=address -fno-omit-frame-pointer>)
+    target_link_options(${target} PUBLIC
+            $<$<AND:$<CONFIG:Debug>,$<CXX_COMPILER_ID:Clang>>:-fsanitize=address -fno-omit-frame-pointer>
+            $<$<AND:$<CONFIG:Debug>,$<CXX_COMPILER_ID:AppleClang>>:-fsanitize=address -fno-omit-frame-pointer>)
+endmacro()
+
 macro(target_enable_coverage target)
-    message(STATUS "Code coverage ON")
+    message(STATUS "Code coverage ON") message("-- ASAN Enabled, Configuring...")
+    target_compile_options(${target} PUBLIC
+            $<$<AND:$<CONFIG:Debug>,$<CXX_COMPILER_ID:Clang>>:-fsanitize=address -fno-omit-frame-pointer>
+            $<$<AND:$<CONFIG:Debug>,$<CXX_COMPILER_ID:AppleClang>>:-fsanitize=address -fno-omit-frame-pointer>)
+    target_link_options(${target} PUBLIC
+            $<$<AND:$<CONFIG:Debug>,$<CXX_COMPILER_ID:Clang>>:-fsanitize=address -fno-omit-frame-pointer>
+            $<$<AND:$<CONFIG:Debug>,$<CXX_COMPILER_ID:AppleClang>>:-fsanitize=address -fno-omit-frame-pointer>)
+endmacro()
+
+macro(target_enable_coverage target)
     # This option is used to compile and link code instrumented for coverage analysis.
     # The option is a synonym for -fprofile-arcs -ftest-coverage (when compiling) and -lgcov (when linking).
     # See the documentation for those options for more details.
